@@ -1,0 +1,207 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-primary-600 text-white rounded-lg 
+           hover:bg-primary-700 active:bg-primary-800 
+           transition-all duration-200 ease-in-out
+           shadow-sm hover:shadow-md
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply px-4 py-2 bg-white text-gray-700 rounded-lg 
+           border border-gray-300
+           hover:bg-gray-50 active:bg-gray-100
+           transition-all duration-200 ease-in-out
+           shadow-sm hover:shadow-md
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg 
+           focus:ring-2 focus:ring-primary-500 focus:border-transparent
+           transition-all duration-200 ease-in-out
+           placeholder-gray-400;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-sm hover:shadow-md
+           transition-all duration-200 ease-in-out
+           border border-gray-100;
+  }
+
+  .card-hover {
+    @apply hover:border-primary-200 hover:shadow-lg
+           transition-all duration-200 ease-in-out;
+  }
+
+  .nav-link {
+    @apply px-3 py-2 rounded-lg text-sm font-medium
+           transition-colors duration-200 ease-in-out
+           hover:bg-gray-100;
+  }
+
+  .nav-link-active {
+    @apply bg-primary-50 text-primary-700;
+  }
+
+  .stat-card {
+    @apply p-4 rounded-lg bg-gradient-to-br from-primary-50 to-white
+           border border-primary-100;
+  }
+
+  .toggle-switch {
+    @apply relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full
+           border-2 border-transparent transition-colors duration-200 ease-in-out
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .toggle-switch-on {
+    @apply bg-primary-600;
+  }
+
+  .toggle-switch-off {
+    @apply bg-gray-200;
+  }
+
+  .toggle-switch-handle {
+    @apply pointer-events-none relative inline-block h-5 w-5 transform rounded-full
+           bg-white shadow ring-0 transition duration-200 ease-in-out;
+  }
+
+  .toggle-switch-handle-on {
+    @apply translate-x-5;
+  }
+
+  .toggle-switch-handle-off {
+    @apply translate-x-0;
+  }
+}
+
+/* Custom animations */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full hover:bg-gray-400 transition-colors duration-200;
+}
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
