@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { authService } from '@/services/auth'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
@@ -19,95 +20,46 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function login(credentials) {
     try {
-      // TODO: Implement actual API call
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials)
-      })
-      
-      if (!response.ok) throw new Error('Login failed')
-      
-      const data = await response.json()
-      token.value = data.token
-      user.value = data.user
-      localStorage.setItem('token', data.token)
-      
+      const { token: newToken, user: userData } = await authService.login(credentials)
+      token.value = newToken
+      user.value = userData
+      onboardingCompleted.value = userData.onboardingCompleted
+      localStorage.setItem('token', newToken)
       return true
     } catch (error) {
       console.error('Login error:', error)
-      return false
+      throw error
     }
   }
 
   async function register(userData) {
     try {
-      // TODO: Implement actual API call
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData)
-      })
-      
-      if (!response.ok) throw new Error('Registration failed')
-      
-      const data = await response.json()
-      token.value = data.token
-      user.value = data.user
-      localStorage.setItem('token', data.token)
-      
+      const { token: newToken, user: registeredUser } = await authService.register(userData)
+      token.value = newToken
+      user.value = registeredUser
+      onboardingCompleted.value = registeredUser.onboardingCompleted
+      localStorage.setItem('token', newToken)
       return true
     } catch (error) {
       console.error('Registration error:', error)
-      return false
+      throw error
     }
   }
 
   async function logout() {
     token.value = null
     user.value = null
+    onboardingCompleted.value = false
     localStorage.removeItem('token')
-  }
-
-  async function completeOnboarding(onboardingData) {
-    try {
-      // TODO: Implement actual API call
-      const response = await fetch('/api/auth/onboarding', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token.value}`
-        },
-        body: JSON.stringify(onboardingData)
-      })
-      
-      if (!response.ok) throw new Error('Onboarding failed')
-      
-      onboardingCompleted.value = true
-      user.value = { ...user.value, ...onboardingData }
-      
-      return true
-    } catch (error) {
-      console.error('Onboarding error:', error)
-      return false
-    }
   }
 
   async function checkAuth() {
     if (!token.value) return false
     
     try {
-      // TODO: Implement actual API call
-      const response = await fetch('/api/auth/me', {
-        headers: { 'Authorization': `Bearer ${token.value}` }
-      })
-      
-      if (!response.ok) throw new Error('Auth check failed')
-      
-      const data = await response.json()
-      user.value = data.user
-      onboardingCompleted.value = data.onboardingCompleted
-      
+      const { user: userData, onboardingCompleted: completed } = await authService.checkAuth(token.value)
+      user.value = userData
+      onboardingCompleted.value = completed
       return true
     } catch (error) {
       console.error('Auth check error:', error)
@@ -125,7 +77,6 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     register,
     logout,
-    completeOnboarding,
     checkAuth
   }
 }) 
