@@ -9,6 +9,10 @@ const MOCK_USERS = [
   }
 ]
 
+// Storage keys
+const TOKEN_KEY = 'auth_token'
+const REMEMBER_ME_KEY = 'auth_remember_me'
+
 // Mock authentication service
 export const authService = {
   async login(credentials) {
@@ -22,7 +26,19 @@ export const authService = {
     }
 
     // Generate a mock token
-    const token = btoa(JSON.stringify({ userId: user.id, email: user.email }))
+    const token = btoa(JSON.stringify({ 
+      userId: user.id, 
+      email: user.email,
+      rememberMe: credentials.remember || false
+    }))
+    
+    // Store remember me preference
+    if (credentials.remember) {
+      localStorage.setItem(REMEMBER_ME_KEY, 'true')
+    } else {
+      sessionStorage.setItem(REMEMBER_ME_KEY, 'true')
+      localStorage.removeItem(REMEMBER_ME_KEY)
+    }
     
     // Return user data without password
     const { password, ...userData } = user
@@ -50,7 +66,19 @@ export const authService = {
     MOCK_USERS.push(newUser)
 
     // Generate a mock token
-    const token = btoa(JSON.stringify({ userId: newUser.id, email: newUser.email }))
+    const token = btoa(JSON.stringify({ 
+      userId: newUser.id, 
+      email: newUser.email,
+      rememberMe: userData.remember || false
+    }))
+    
+    // Store remember me preference
+    if (userData.remember) {
+      localStorage.setItem(REMEMBER_ME_KEY, 'true')
+    } else {
+      sessionStorage.setItem(REMEMBER_ME_KEY, 'true')
+      localStorage.removeItem(REMEMBER_ME_KEY)
+    }
     
     // Return user data without password
     const { password, ...userDataWithoutPassword } = newUser
@@ -65,11 +93,17 @@ export const authService = {
     await new Promise(resolve => setTimeout(resolve, 500))
 
     try {
-      const { userId } = JSON.parse(atob(token))
+      const { userId, rememberMe } = JSON.parse(atob(token))
       const user = MOCK_USERS.find(u => u.id === userId)
       
       if (!user) {
         throw new Error('Invalid token')
+      }
+
+      // Verify remember me preference
+      const storedRememberMe = localStorage.getItem(REMEMBER_ME_KEY) === 'true'
+      if (rememberMe !== storedRememberMe) {
+        throw new Error('Session expired')
       }
 
       // Return user data without password
@@ -81,5 +115,43 @@ export const authService = {
     } catch (error) {
       throw new Error('Invalid token')
     }
+  },
+
+  getStoredToken() {
+    // Check both storage locations
+    const token = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY)
+    if (!token) return null
+
+    try {
+      const { rememberMe } = JSON.parse(atob(token))
+      const storedRememberMe = localStorage.getItem(REMEMBER_ME_KEY) === 'true'
+      
+      // If remember me preference doesn't match, clear the token
+      if (rememberMe !== storedRememberMe) {
+        this.clearStoredToken()
+        return null
+      }
+      
+      return token
+    } catch {
+      this.clearStoredToken()
+      return null
+    }
+  },
+
+  storeToken(token, rememberMe) {
+    if (rememberMe) {
+      localStorage.setItem(TOKEN_KEY, token)
+    } else {
+      sessionStorage.setItem(TOKEN_KEY, token)
+      localStorage.removeItem(TOKEN_KEY)
+    }
+  },
+
+  clearStoredToken() {
+    localStorage.removeItem(TOKEN_KEY)
+    sessionStorage.removeItem(TOKEN_KEY)
+    localStorage.removeItem(REMEMBER_ME_KEY)
+    sessionStorage.removeItem(REMEMBER_ME_KEY)
   }
 } 

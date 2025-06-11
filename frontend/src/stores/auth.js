@@ -4,7 +4,7 @@ import { authService } from '@/services/auth'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
-  const token = ref(localStorage.getItem('token'))
+  const token = ref(authService.getStoredToken())
   const onboardingCompleted = ref(false)
 
   const isAuthenticated = computed(() => !!token.value)
@@ -24,7 +24,7 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = newToken
       user.value = userData
       onboardingCompleted.value = userData.onboardingCompleted
-      localStorage.setItem('token', newToken)
+      authService.storeToken(newToken, credentials.remember)
       return true
     } catch (error) {
       console.error('Login error:', error)
@@ -38,7 +38,7 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = newToken
       user.value = registeredUser
       onboardingCompleted.value = registeredUser.onboardingCompleted
-      localStorage.setItem('token', newToken)
+      authService.storeToken(newToken, userData.remember)
       return true
     } catch (error) {
       console.error('Registration error:', error)
@@ -50,7 +50,7 @@ export const useAuthStore = defineStore('auth', () => {
     token.value = null
     user.value = null
     onboardingCompleted.value = false
-    localStorage.removeItem('token')
+    authService.clearStoredToken()
   }
 
   async function checkAuth() {
