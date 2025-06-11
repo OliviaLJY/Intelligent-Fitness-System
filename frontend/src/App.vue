@@ -1,14 +1,9 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import Navbar from '@/components/layout/Navbar.vue'
+// import Navbar from '@/components/layout/Navbar.vue' (no longer needed)
 
 const route = useRoute()
-
-// Don't show navbar on auth pages
-const showNavbar = computed(() => {
-  return !route.path.startsWith('/auth')
-})
 
 // Don't show footer on auth pages
 const showFooter = computed(() => {
@@ -18,8 +13,7 @@ const showFooter = computed(() => {
 
 <template>
   <div class="min-h-screen bg-gray-50">
-    <!-- Navigation -->
-    <Navbar v-if="showNavbar" />
+    <!-- Navigation (removed to prevent duplication) -->
     
     <!-- Main Content -->
     <main class="py-6">
