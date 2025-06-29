@@ -1,0 +1,229 @@
+spring:
+  application:
+    name: smart-fitness-system
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fitness_db
+    username: ${DB_USERNAME:fitness_user}
+    password: ${DB_PASSWORD:fitness_pass}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+      max-lifetime: 1200000
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+    open-in-view: false
+  
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+  
+  security:
+    user:
+      name: admin
+      password: ${ADMIN_PASSWORD:admin123}
+  
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  
+  # WebSocket messaging configuration
+  websocket:
+    allowed-origins: ${WEBSOCKET_ORIGINS:http://localhost:3000,http://localhost:5173}
+
+# JWT Configuration
+fitness:
+  jwt:
+    secret: ${JWT_SECRET:mySecretKey12345678901234567890123456789012345678901234567890}
+    expiration: ${JWT_EXPIRATION:86400000}
+    refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
+  
+  # OpenCV Configuration
+  opencv:
+    confidence-threshold: ${OPENCV_CONFIDENCE:0.7}
+    motion-analysis:
+      min-detection-confidence: ${OPENCV_MIN_DETECTION:0.5}
+      min-tracking-confidence: ${OPENCV_MIN_TRACKING:0.5}
+  
+  # WebSocket Configuration
+  websocket:
+    allowed-origins: ${WEBSOCKET_ORIGINS:http://localhost:3000,http://localhost:5173}
+
+# Server Configuration
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
+
+# Logging Configuration
+logging:
+  level:
+    com.fitness: ${LOG_LEVEL:INFO}
+    org.springframework.security: ${SECURITY_LOG_LEVEL:DEBUG}
+    org.springframework.web: ${WEB_LOG_LEVEL:INFO}
+    org.hibernate.SQL: ${SQL_LOG_LEVEL:WARN}
+    org.hibernate.type.descriptor.sql.BasicBinder: ${SQL_PARAM_LOG_LEVEL:WARN}
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+  info:
+    env:
+      enabled: true
+
+# Application Information
+info:
+  app:
+    name: Smart Fitness System
+    description: AI-Powered Motion Analysis System
+    version: 1.0.0
+    encoding: UTF-8
+    java:
+      version: ${java.version}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: development
+  
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  
+  flyway:
+    enabled: false
+
+logging:
+  level:
+    com.fitness: DEBUG
+    org.springframework.security: DEBUG
+
+---
+spring:
+  config:
+    activate:
+      on-profile: production
+  
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+logging:
+  level:
+    com.fitness: WARN
+    org.springframework.security: WARN
+    
+server:
+  ssl:
+    enabled: ${SSL_ENABLED:false}
+    key-store: ${SSL_KEY_STORE:}
+    key-store-password: ${SSL_KEY_STORE_PASSWORD:}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL;CACHE_SIZE=65536
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+      connection-timeout: 5000
+      idle-timeout: 300000
+      max-lifetime: 600000
+      leak-detection-threshold: 60000
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+        use_sql_comments: false
+        generate_statistics: false
+        jdbc:
+          batch_size: 50
+          batch_versioned_data: true
+        order_inserts: true
+        order_updates: true
+        cache:
+          use_second_level_cache: false
+          use_query_cache: false
+        connection:
+          provider_disables_autocommit: true
+  
+  flyway:
+    enabled: false
+  
+  main:
+    allow-circular-references: true
+    lazy-initialization: true
+  
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+  
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+
+# Optimized logging for test profile
+logging:
+  level:
+    com.fitness: INFO
+    org.springframework.security: WARN
+    org.springframework.web: WARN
+    org.hibernate.SQL: OFF
+    org.hibernate.type.descriptor.sql.BasicBinder: OFF
+    org.springframework.boot.devtools: WARN
+    org.springframework.context: WARN
+  pattern:
+    console: "%d{HH:mm:ss} - %msg%n" 

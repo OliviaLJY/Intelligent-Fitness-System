@@ -1,157 +1,114 @@
-// Mock user data for development
-const MOCK_USERS = [
-  {
-    id: 1,
-    name: 'John Doe',
-    email: 'john@example.com',
-    password: 'password123', // In a real app, this would be hashed
-    onboardingCompleted: true
-  }
-]
+import { api, storeToken, clearStoredToken, getStoredToken } from './api.js'
 
-// Storage keys
-const TOKEN_KEY = 'auth_token'
-const REMEMBER_ME_KEY = 'auth_remember_me'
-
-// Mock authentication service
+// Real authentication service
 export const authService = {
   async login(credentials) {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    try {
+      const response = await api.post('/auth/login', {
+        usernameOrEmail: credentials.email,
+        password: credentials.password
+      })
 
-    const user = MOCK_USERS.find(u => u.email === credentials.email)
-    
-    if (!user || user.password !== credentials.password) {
-      throw new Error('Invalid email or password')
-    }
-
-    // Generate a mock token
-    const token = btoa(JSON.stringify({ 
-      userId: user.id, 
-      email: user.email,
-      rememberMe: credentials.remember || false
-    }))
-    
-    // Store remember me preference
-    if (credentials.remember) {
-      localStorage.setItem(REMEMBER_ME_KEY, 'true')
-    } else {
-      sessionStorage.setItem(REMEMBER_ME_KEY, 'true')
-      localStorage.removeItem(REMEMBER_ME_KEY)
-    }
-    
-    // Return user data without password
-    const { password, ...userData } = user
-    return {
-      token,
-      user: userData
+      const { accessToken, refreshToken, user } = response.data
+      
+      // Store tokens
+      storeToken(accessToken, credentials.remember)
+      
+      return {
+        token: accessToken,
+        refreshToken,
+        user
+      }
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Login failed')
     }
   },
 
   async register(userData) {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    try {
+      const response = await api.post('/auth/register', {
+        username: userData.name, // or use separate username field
+        email: userData.email,
+        password: userData.password,
+        firstName: userData.firstName || userData.name?.split(' ')[0],
+        lastName: userData.lastName || userData.name?.split(' ')[1] || ''
+      })
 
-    // Check if email already exists
-    if (MOCK_USERS.some(u => u.email === userData.email)) {
-      throw new Error('Email already registered')
-    }
-
-    // Create new user
-    const newUser = {
-      id: MOCK_USERS.length + 1,
-      ...userData,
-      onboardingCompleted: false
-    }
-    MOCK_USERS.push(newUser)
-
-    // Generate a mock token
-    const token = btoa(JSON.stringify({ 
-      userId: newUser.id, 
-      email: newUser.email,
-      rememberMe: userData.remember || false
-    }))
-    
-    // Store remember me preference
-    if (userData.remember) {
-      localStorage.setItem(REMEMBER_ME_KEY, 'true')
-    } else {
-      sessionStorage.setItem(REMEMBER_ME_KEY, 'true')
-      localStorage.removeItem(REMEMBER_ME_KEY)
-    }
-    
-    // Return user data without password
-    const { password, ...userDataWithoutPassword } = newUser
-    return {
-      token,
-      user: userDataWithoutPassword
+      const { accessToken, refreshToken, user } = response.data
+      
+      // Store tokens
+      storeToken(accessToken, userData.remember)
+      
+      return {
+        token: accessToken,
+        refreshToken,
+        user: {
+          ...user,
+          onboardingCompleted: false // New users need onboarding
+        }
+      }
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Registration failed')
     }
   },
 
   async checkAuth(token) {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500))
-
     try {
-      const { userId, rememberMe } = JSON.parse(atob(token))
-      const user = MOCK_USERS.find(u => u.id === userId)
-      
-      if (!user) {
-        throw new Error('Invalid token')
+      // If token is provided, use it; otherwise get from storage
+      const authToken = token || getStoredToken()
+      if (!authToken) {
+        throw new Error('No token found')
       }
 
-      // Verify remember me preference
-      const storedRememberMe = localStorage.getItem(REMEMBER_ME_KEY) === 'true'
-      if (rememberMe !== storedRememberMe) {
-        throw new Error('Session expired')
-      }
+      // Verify token with backend
+      const response = await api.get('/auth/me', {
+        headers: {
+          Authorization: `Bearer ${authToken}`
+        }
+      })
 
-      // Return user data without password
-      const { password, ...userData } = user
       return {
-        user: userData,
-        onboardingCompleted: user.onboardingCompleted
+        user: response.data,
+        onboardingCompleted: response.data.onboardingCompleted || false
       }
     } catch (error) {
+      // Token is invalid, clear it
+      clearStoredToken()
       throw new Error('Invalid token')
     }
   },
 
-  getStoredToken() {
-    // Check both storage locations
-    const token = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY)
-    if (!token) return null
-
+  async logout() {
     try {
-      const { rememberMe } = JSON.parse(atob(token))
-      const storedRememberMe = localStorage.getItem(REMEMBER_ME_KEY) === 'true'
-      
-      // If remember me preference doesn't match, clear the token
-      if (rememberMe !== storedRememberMe) {
-        this.clearStoredToken()
-        return null
-      }
-      
-      return token
-    } catch {
-      this.clearStoredToken()
-      return null
+      // Optional: Call logout endpoint on backend
+      await api.post('/auth/logout')
+    } catch (error) {
+      // Ignore errors on logout
+      console.warn('Logout request failed:', error.message)
+    } finally {
+      // Always clear local tokens
+      clearStoredToken()
     }
   },
 
-  storeToken(token, rememberMe) {
-    if (rememberMe) {
-      localStorage.setItem(TOKEN_KEY, token)
-    } else {
-      sessionStorage.setItem(TOKEN_KEY, token)
-      localStorage.removeItem(TOKEN_KEY)
+  async refreshToken() {
+    try {
+      const response = await api.post('/auth/refresh')
+      const { accessToken } = response.data
+      
+      // Update stored token
+      const rememberMe = localStorage.getItem('auth_remember_me') === 'true'
+      storeToken(accessToken, rememberMe)
+      
+      return accessToken
+    } catch (error) {
+      clearStoredToken()
+      throw new Error('Token refresh failed')
     }
   },
 
-  clearStoredToken() {
-    localStorage.removeItem(TOKEN_KEY)
-    sessionStorage.removeItem(TOKEN_KEY)
-    localStorage.removeItem(REMEMBER_ME_KEY)
-    sessionStorage.removeItem(REMEMBER_ME_KEY)
-  }
+  // Legacy methods for backward compatibility
+  getStoredToken,
+  storeToken,
+  clearStoredToken
 } 

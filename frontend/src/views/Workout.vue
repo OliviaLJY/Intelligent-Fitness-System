@@ -11,41 +11,41 @@
               </svg>
             </div>
             <h1 class="apple-title">Workout</h1>
-          </div>
+        </div>
           <div class="apple-nav-actions">
-            <button
-              v-if="!currentWorkout"
-              @click="showWorkoutCreator = true"
+          <button
+            v-if="!currentWorkout"
+            @click="showWorkoutCreator = true"
               class="apple-button-primary"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
               <span>New Workout</span>
-            </button>
-            <button
-              v-if="!currentWorkout"
-              @click="showTemplates = true"
+          </button>
+          <button
+            v-if="!currentWorkout"
+            @click="showTemplates = true"
               class="apple-button-secondary"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
               <span>Templates</span>
-            </button>
-            <button
-              v-if="currentWorkout"
-              @click="endWorkoutSession"
+          </button>
+          <button
+            v-if="currentWorkout"
+            @click="endWorkoutSession"
               class="apple-button-destructive"
-            >
-              <span>End Session</span>
-            </button>
+          >
+            <span>End Session</span>
+          </button>
           </div>
         </div>
+        </div>
       </div>
-    </div>
 
-    <!-- Main Content -->
+      <!-- Main Content -->
     <div class="apple-main-content">
       <div class="max-w-7xl mx-auto px-6">
         <!-- Active Workout Section -->
@@ -59,7 +59,7 @@
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Video and Exercise Section -->
             <div class="lg:col-span-2 space-y-8">
-              <!-- Video Feed -->
+          <!-- Video Feed -->
               <div class="apple-card-large">
                 <div class="apple-card-header">
                   <h3 class="apple-card-title">AI Form Analysis</h3>
@@ -80,41 +80,41 @@
                     <p class="apple-placeholder-text">Start recording to begin real-time form analysis</p>
                   </div>
                   
-                  <video
-                    v-else
-                    ref="videoElement"
+                <video
+                  v-else
+                  ref="videoElement"
                     class="apple-video-element"
-                    autoplay
-                    muted
-                  ></video>
+                  autoplay
+                  muted
+                ></video>
                   
                   <!-- AI Overlay -->
                   <div v-if="isRecording" class="apple-video-overlay">
                     <div class="apple-ai-badge">
                       <span>Form Score: 85%</span>
-                    </div>
                   </div>
                 </div>
-                
+              </div>
+              
                 <div class="apple-video-controls">
-                  <button
-                    v-if="!isRecording"
-                    @click="startRecording"
+                <button
+                  v-if="!isRecording"
+                  @click="startRecording"
                     class="apple-button-large apple-button-success"
-                  >
+                >
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    </svg>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                  </svg>
                     <span>Start Recording</span>
-                  </button>
-                  <button
-                    v-else
-                    @click="stopRecording"
+                </button>
+                <button
+                  v-else
+                  @click="stopRecording"
                     class="apple-button-large apple-button-destructive"
-                  >
+                >
                     <div class="w-2 h-2 bg-current rounded-sm"></div>
                     <span>Stop Recording</span>
-                  </button>
+                </button>
                 </div>
               </div>
 
@@ -124,13 +124,13 @@
                   <h3 class="apple-card-title">Exercise Queue</h3>
                   <div class="apple-progress-badge">
                     {{ completedExercises }}/{{ totalExercises }}
-                  </div>
-                </div>
-                
+            </div>
+          </div>
+
                 <div class="apple-exercise-list">
-                  <div
+              <div
                     v-for="(exercise, index) in currentWorkout.exercises"
-                    :key="exercise.id"
+                :key="exercise.id"
                     class="apple-exercise-item"
                     :class="{
                       'completed': exercise.completed,
@@ -141,8 +141,8 @@
                       <span v-if="!exercise.completed">{{ index + 1 }}</span>
                       <svg v-else class="w-5 h-5 text-apple-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
+                    </svg>
+                  </div>
                     
                     <div class="apple-exercise-content">
                       <h4 class="apple-exercise-name">{{ exercise.name }}</h4>
@@ -160,33 +160,33 @@
                           class="apple-progress-fill"
                           :style="{ width: `${(exercise.currentSet / exercise.sets) * 100}%` }"
                         ></div>
-                      </div>
-                    </div>
+                  </div>
+                </div>
                     
                     <div class="apple-exercise-action">
-                      <button
-                        v-if="!exercise.completed"
-                        @click="startExercise(exercise)"
+                  <button
+                    v-if="!exercise.completed"
+                    @click="startExercise(exercise)"
                         class="apple-button-small"
                         :class="{ 'active': currentExercise?.id === exercise.id }"
-                      >
+                  >
                         {{ currentExercise?.id === exercise.id ? 'Active' : 'Start' }}
-                      </button>
+                  </button>
                       <div v-else class="apple-completed-badge">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
                         <span>Done</span>
                       </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
 
-            <!-- Sidebar -->
-            <div class="space-y-6">
-              <!-- Current Exercise -->
+        <!-- Sidebar -->
+        <div class="space-y-6">
+          <!-- Current Exercise -->
               <div v-if="currentExercise" class="apple-card">
                 <div class="apple-card-header">
                   <h3 class="apple-card-title">Current Exercise</h3>
@@ -221,51 +221,51 @@
                         <span class="apple-stat-label">Weight</span>
                         <span class="apple-stat-value">{{ currentExercise.weight || 0 }}kg</span>
                       </div>
-                    </div>
-                  </div>
                 </div>
               </div>
+            </div>
+          </div>
 
-              <!-- Rest Timer -->
-              <RestTimer
-                v-if="showRestTimer"
-                :initial-time="restTime"
-                @complete="onRestComplete"
+          <!-- Rest Timer -->
+          <RestTimer
+            v-if="showRestTimer"
+            :initial-time="restTime"
+            @complete="onRestComplete"
                 class="apple-card"
-              />
+          />
 
-              <!-- Form Feedback -->
+          <!-- Form Feedback -->
               <div v-if="currentExercise && isRecording" class="apple-card">
                 <div class="apple-card-header">
                   <h3 class="apple-card-title">Form Analysis</h3>
                 </div>
                 
                 <div class="apple-feedback-list">
-                  <div
-                    v-for="(feedback, index) in formFeedback"
-                    :key="index"
+              <div
+                v-for="(feedback, index) in formFeedback"
+                :key="index"
                     class="apple-feedback-item"
                     :class="feedback.type"
-                  >
+              >
                     <div class="apple-feedback-icon">
-                      <svg
+                  <svg
                         v-if="feedback.type === 'success'"
                         class="w-5 h-5 text-apple-green"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                       </svg>
                       <svg
-                        v-else
+                      v-else
                         class="w-5 h-5 text-apple-red"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
                       >
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
+                  </svg>
                     </div>
                     <p class="apple-feedback-text">{{ feedback.message }}</p>
                   </div>
@@ -305,29 +305,29 @@
                     <div class="apple-stat-content">
                       <span class="apple-stat-label">Progress</span>
                       <span class="apple-stat-value">{{ completedExercises }}/{{ totalExercises }}</span>
-                    </div>
-                  </div>
-                </div>
-                
+              </div>
+            </div>
+          </div>
+
                 <!-- Overall Progress -->
                 <div class="apple-overall-progress">
                   <div class="flex justify-between items-center mb-2">
                     <span class="apple-progress-label">Overall Progress</span>
                     <span class="apple-progress-percentage">{{ Math.round((completedExercises / totalExercises) * 100) }}%</span>
-                  </div>
+              </div>
                   <div class="apple-progress-track">
                     <div 
                       class="apple-progress-fill"
                       :style="{ width: `${(completedExercises / totalExercises) * 100}%` }"
                     ></div>
                   </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Empty State -->
+      <!-- Empty State -->
         <div v-else class="apple-empty-state">
           <div class="apple-empty-icon">
             <svg class="w-20 h-20 text-apple-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -347,33 +347,33 @@
             <button @click="showTemplates = true" class="apple-button-large apple-button-secondary">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
+        </svg>
               <span>Browse Templates</span>
-            </button>
+          </button>
           </div>
         </div>
+        </div>
       </div>
-    </div>
 
-    <!-- Modals -->
-    <WorkoutCreator
-      v-if="showWorkoutCreator"
-      @close="showWorkoutCreator = false"
-      @save="startWorkoutSession"
-      @save-template="saveWorkoutTemplate"
-    />
+      <!-- Modals -->
+      <WorkoutCreator
+        v-if="showWorkoutCreator"
+        @close="showWorkoutCreator = false"
+        @save="startWorkoutSession"
+        @save-template="saveWorkoutTemplate"
+      />
 
-    <!-- Templates Modal -->
+      <!-- Templates Modal -->
     <div v-if="showTemplates" class="apple-modal-overlay">
       <div class="apple-modal">
         <div class="apple-modal-header">
           <h3 class="apple-modal-title">Workout Templates</h3>
           <button @click="showTemplates = false" class="apple-close-button">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
         
         <div class="apple-modal-content">
           <div class="apple-template-grid">
@@ -451,10 +451,14 @@ const startWorkoutSession = async (workoutData) => {
 
 const endWorkoutSession = async () => {
   if (confirm('Are you sure you want to end this workout session?')) {
+    // Stop camera recording first
+    if (isRecording.value) {
+      stopRecording()
+    }
+    
     await workoutStore.endWorkout()
     stopSessionTimer()
     sessionStartTime.value = null
-    isRecording.value = false
     currentExercise.value = null
     formFeedback.value = []
   }
@@ -529,14 +533,28 @@ const stopSessionTimer = () => {
 }
 
 // Lifecycle hooks
+let handleVisibilityChange
+
 onMounted(() => {
   workoutStore.fetchExercises()
   workoutStore.fetchWorkoutHistory()
+  
+  // Handle browser tab visibility changes
+  handleVisibilityChange = () => {
+    if (document.hidden && isRecording.value) {
+      stopRecording()
+    }
+  }
+  
+  document.addEventListener('visibilitychange', handleVisibilityChange)
 })
 
 onUnmounted(() => {
   stopRecording()
   stopSessionTimer()
+  if (handleVisibilityChange) {
+    document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }
 })
 </script>
 

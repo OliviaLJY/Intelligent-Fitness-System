@@ -362,10 +362,14 @@ const startWorkoutSession = async (workoutData) => {
 
 const endWorkoutSession = async () => {
   if (confirm('Are you sure you want to end this workout session?')) {
+    // Stop camera recording first
+    if (isRecording.value) {
+      stopRecording()
+    }
+    
     await workoutStore.endWorkout()
     stopSessionTimer()
     sessionStartTime.value = null
-    isRecording.value = false
     currentExercise.value = null
     formFeedback.value = []
   }
@@ -440,14 +444,28 @@ const stopSessionTimer = () => {
 }
 
 // Lifecycle hooks
+let handleVisibilityChange
+
 onMounted(() => {
   workoutStore.fetchExercises()
   workoutStore.fetchWorkoutHistory()
+  
+  // Handle browser tab visibility changes
+  handleVisibilityChange = () => {
+    if (document.hidden && isRecording.value) {
+      stopRecording()
+    }
+  }
+  
+  document.addEventListener('visibilitychange', handleVisibilityChange)
 })
 
 onUnmounted(() => {
   stopRecording()
   stopSessionTimer()
+  if (handleVisibilityChange) {
+    document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }
 })
 </script>
 

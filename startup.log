@@ -1,0 +1,18 @@
+🚀 Starting Intelligent Fitness System (Optimized)
+==============================================
+📝 Cleaning up existing processes...
+🔧 Starting backend (optimized)...
+⏳ Waiting for backend to start...
+✅ Backend started successfully on port 8080
+🎨 Starting frontend...
+⏳ Waiting for frontend to start...
+✅ Frontend started successfully on port 5173
+
+🎉 System started successfully!
+================================
+📱 Frontend: http://localhost:5173
+🔧 Backend:  http://localhost:8080
+❤️  Health:  http://localhost:8080/actuator/health
+
+Press Ctrl+C to stop all services
+./start-dev.sh: line 85: 32043 Hangup: 1               npm run dev > /dev/null 2>&1
