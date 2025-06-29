@@ -93,7 +93,7 @@ VITE_WS_URL=ws://localhost:8080
 
 ## 📁 Project Structure
 ```
-smart-fitness-system/
+intelligent-fitness-system/
 ├── frontend/                 # Vue.js application
 │   ├── src/
 │   │   ├── components/      # Reusable Vue components
@@ -168,4 +168,4 @@ For any questions or suggestions, please open an issue in the repository or cont
 
 ---
 
-Built with ❤️ for fitness enthusiasts everywhere
+Built with ❤️ by the Intelligent Fitness System (IFS) Team
