@@ -15,27 +15,3 @@ Backend: Java Spring Boot with Gradle
 Computer Vision: OpenCV (integrated via Java bindings)
 Database: PostgreSQL
 Real-time Communication: WebSocket
-Project Structure
-smart-fitness-system/
-├── frontend/                 # Vue.js application
-│   ├── src/
-│   │   ├── components/      # Vue components
-│   │   ├── views/          # Page views
-│   │   ├── store/          # Vuex store
-│   │   ├── services/       # API services
-│   │   └── utils/          # Utility functions
-│   ├── package.json
-│   └── vite.config.js
-├── backend/                 # Spring Boot application
-│   ├── src/main/java/
-│   │   └── com/fitness/
-│   │       ├── controller/ # REST controllers
-│   │       ├── service/    # Business logic
-│   │       ├── model/      # Entity models
-│   │       ├── repository/ # Data repositories
-│   │       └── config/     # Configuration
-│   ├── build.gradle
-│   └── application.yml
-└── opencv-module/          # OpenCV motion analysis
-    ├── src/main/java/
-    └── native/             # Native libraries
