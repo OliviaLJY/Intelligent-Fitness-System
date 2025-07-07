@@ -1,4 +1,4 @@
-Smart Fitness System - AI-Powered Motion Analysis
+Intelligent Fitness System - AI-Powered Motion Analysis
 Project Overview
 A comprehensive intelligent fitness system that addresses the pain point of traditional fitness programs lacking personalization. The solution uses OpenCV-based motion analysis to provide personalized training recommendations and real-time form correction.
 Key Features
