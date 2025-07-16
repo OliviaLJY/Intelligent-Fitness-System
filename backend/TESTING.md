@@ -1,4 +1,4 @@
-# 🧪 Smart Fitness System Backend Testing Guide
+# 🧪 Intelligent Fitness System Backend Testing Guide
 
 This guide will help you test the Smart Fitness System backend thoroughly.
 
