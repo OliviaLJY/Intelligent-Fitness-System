@@ -51,6 +51,8 @@ public class SecurityConfig {
                         .antMatchers("/actuator/health").permitAll()
                         .antMatchers("/actuator/info").permitAll()
                         .antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        // Test endpoints (for development/debugging)
+                        .antMatchers("/test/**").permitAll()
                         // WebSocket endpoints
                         .antMatchers("/ws/**").permitAll()
                         // Admin endpoints
