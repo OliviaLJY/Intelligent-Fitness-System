@@ -1,6 +1,6 @@
 # 🏋️ How to Run Your Intelligent Fitness System
 
-## 🚀 **QUICK START** (Most people should use this)
+## 🚀 **QUICK START** 
 
 1. **Open Terminal** and navigate to your project:
    ```bash
