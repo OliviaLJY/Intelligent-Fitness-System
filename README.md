@@ -4,7 +4,7 @@ An AI-powered fitness platform that provides real-time motion analysis, personal
 
 ![IFS Demo](docs/demo.gif)
 
-## 🌟 Features
+##  Features
 
 ### Real-time Motion Analysis
 - AI-powered form correction using OpenCV
@@ -91,7 +91,7 @@ VITE_API_URL=http://localhost:8080
 VITE_WS_URL=ws://localhost:8080
 ```
 
-## 📁 Project Structure
+##  Project Structure
 ```
 intelligent-fitness-system/
 ├── frontend/                 # Vue.js application
@@ -120,7 +120,7 @@ intelligent-fitness-system/
     └── native/             # Native libraries
 ```
 
-## 🔑 Key Features in Detail
+##  Key Features in Detail
 
 ### Exercise Library
 - Comprehensive exercise database
@@ -143,7 +143,7 @@ intelligent-fitness-system/
 - Form improvement tracking
 - Goal setting and monitoring
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
@@ -151,18 +151,18 @@ intelligent-fitness-system/
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - OpenCV for computer vision capabilities
 - Vue.js team for the amazing framework
 - Spring Boot team for the robust backend framework
 - All contributors who have helped shape this project
 
-## 📧 Contact
+##  Contact
 
 For any questions or suggestions, please open an issue in the repository or contact the maintainers.
 
